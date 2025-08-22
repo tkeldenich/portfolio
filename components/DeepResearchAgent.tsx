@@ -377,7 +377,7 @@ The intersection of quantum computing and cybersecurity represents one of the mo
                                         </div>
                                         <div className="mt-2 p-3 bg-background/70 rounded text-sm space-y-2">
                                             <div className="font-medium text-muted-foreground">Research Context:</div>
-                                            <p>Google's breakthrough in quantum error correction represents a significant step toward practical quantum computing applications.</p>
+                                            <p>Google&apos;s breakthrough in quantum error correction represents a significant step toward practical quantum computing applications.</p>
                                         </div>
                                         <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-2 text-sm border-t pt-3">
                                             <div><span className="font-medium text-muted-foreground">URL:</span> nature.com/articles</div>
@@ -703,6 +703,7 @@ The intersection of quantum computing and cybersecurity represents one of the mo
 };
 
 export default DeepResearchAgent;
+
 
 
 
