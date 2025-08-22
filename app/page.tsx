@@ -1,4 +1,4 @@
-import Explainability from '@/components/Explainability';
+import DeepResearchAgent from '@/components/DeepResearchAgent';
 import TopMenu from '@/components/TopMenu'; // Import the new menu component
 
 export default function Home() {
