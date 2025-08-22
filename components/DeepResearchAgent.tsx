@@ -392,20 +392,40 @@ This research was conducted using a multi-agent system with 5 specialized resear
                                 
                                 <Card>
                                     <CardHeader>
-                                        <CardTitle className="text-sm">Generated Research Brief</CardTitle>
+                                        <CardTitle className="text-sm">Supervisor Strategic Planning</CardTitle>
                                     </CardHeader>
                                     <CardContent>
-                                        <div className="bg-muted p-4 rounded-lg text-sm">
-                                            <p className="font-medium mb-2">Research Objective:</p>
-                                            <p className="mb-4">Conduct comprehensive analysis of latest quantum computing developments across hardware, algorithms, applications, and academic research.</p>
+                                        <div className="space-y-4">
+                                            <Card>
+                                                <CardHeader>
+                                                    <CardTitle className="text-xs flex items-center gap-2">
+                                                        <Brain className="w-3 h-3" />
+                                                        Think Tool Reflection
+                                                    </CardTitle>
+                                                </CardHeader>
+                                                <CardContent className="text-xs">
+                                                    <div className="bg-muted p-3 rounded-lg space-y-2">
+                                                        <p className="font-medium text-blue-600">🤔 Strategic Analysis:</p>
+                                                        <p className="text-muted-foreground italic">"The quantum computing query requires comprehensive coverage across multiple domains. I should deploy specialized researchers for hardware, algorithms, applications, academic progress, and future challenges to ensure thorough analysis."</p>
+                                                        
+                                                        <p className="font-medium text-blue-600 mt-3">🎯 Delegation Strategy:</p>
+                                                        <p className="text-muted-foreground italic">"Each researcher should focus on recent developments (12-18 months) with emphasis on peer-reviewed sources and industry announcements. Parallel execution will optimize research time while ensuring comprehensive coverage."</p>
+                                                    </div>
+                                                </CardContent>
+                                            </Card>
                                             
-                                            <p className="font-medium mb-2">Research Strategy:</p>
-                                            <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-                                                <li>Deploy 5 specialized sub-researchers for parallel investigation</li>
-                                                <li>Focus on developments from the last 12-18 months</li>
-                                                <li>Prioritize peer-reviewed sources and industry announcements</li>
-                                                <li>Synthesize findings into structured comprehensive report</li>
-                                            </ul>
+                                            <div className="bg-muted p-4 rounded-lg text-sm">
+                                                <p className="font-medium mb-2">Generated Research Brief:</p>
+                                                <p className="mb-4">Conduct comprehensive analysis of latest quantum computing developments across hardware, algorithms, applications, and academic research.</p>
+                                                
+                                                <p className="font-medium mb-2">Research Strategy:</p>
+                                                <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+                                                    <li>Deploy 5 specialized sub-researchers for parallel investigation</li>
+                                                    <li>Focus on developments from the last 12-18 months</li>
+                                                    <li>Prioritize peer-reviewed sources and industry announcements</li>
+                                                    <li>Synthesize findings into structured comprehensive report</li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </CardContent>
                                 </Card>
@@ -694,3 +714,4 @@ This research was conducted using a multi-agent system with 5 specialized resear
 };
 
 export default DeepResearchAgent;
+
