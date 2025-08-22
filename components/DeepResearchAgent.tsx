@@ -30,7 +30,7 @@ interface ChatMessage {
 interface ResearchPhase {
     id: string;
     name: string;
-    icon: React.ComponentType<any>;
+    icon: React.ComponentType<{ className?: string }>;
     status: 'pending' | 'active' | 'completed';
     description: string;
 }
@@ -703,3 +703,4 @@ The intersection of quantum computing and cybersecurity represents one of the mo
 };
 
 export default DeepResearchAgent;
+
