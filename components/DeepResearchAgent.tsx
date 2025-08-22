@@ -311,7 +311,7 @@ The intersection of quantum computing and cybersecurity represents one of the mo
                                         </div>
                                         <div className="mt-2 p-3 bg-background/70 rounded text-sm space-y-2">
                                             <div className="font-medium text-muted-foreground">Research Context:</div>
-                                            <p>This source provides critical insights into IBM's quantum hardware advances, particularly their progress in error correction and qubit stability.</p>
+                                            <p>This source provides critical insights into IBM&apos;s quantum hardware advances, particularly their progress in error correction and qubit stability.</p>
                                         </div>
                                         <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-2 text-sm border-t pt-3">
                                             <div><span className="font-medium text-muted-foreground">URL:</span> ibm.com/quantum</div>
@@ -703,5 +703,6 @@ The intersection of quantum computing and cybersecurity represents one of the mo
 };
 
 export default DeepResearchAgent;
+
 
 
