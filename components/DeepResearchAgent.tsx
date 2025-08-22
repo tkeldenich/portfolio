@@ -340,7 +340,7 @@ The intersection of quantum computing and cybersecurity represents one of the mo
                                     <AccordionContent className="p-3 pt-0">
                                         <div className="mt-2 p-3 bg-background/70 rounded text-sm space-y-2">
                                             <div className="font-medium text-muted-foreground">Key Excerpt:</div>
-                                            <em className="italic">"The standardized post-quantum cryptographic algorithms provide security against both classical and quantum computer attacks..."</em>
+                                            <em className="italic">&quot;The standardized post-quantum cryptographic algorithms provide security against both classical and quantum computer attacks...&quot;</em>
                                         </div>
                                         <div className="mt-2 p-3 bg-background/70 rounded text-sm space-y-2">
                                             <div className="font-medium text-muted-foreground">Research Context:</div>
@@ -703,6 +703,7 @@ The intersection of quantum computing and cybersecurity represents one of the mo
 };
 
 export default DeepResearchAgent;
+
 
 
 
