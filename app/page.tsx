@@ -6,7 +6,8 @@ export default function Home() {
     <div className="h-screen bg-background text-foreground flex flex-col">
       <TopMenu name="Tom Keldenich" imageUrl="/images/profile.jpeg" />
       <main className="flex-1 overflow-auto">
-        <Explainability />
+        <DeepResearchAgent />
       </main>
     </div>
   );
+
