@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, Bot, User, Database, Zap, CheckCircle, Info } from 'lucide-react';
+import { Send, Bot, User, Database, Zap, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -334,7 +334,7 @@ The budget aimed to sustain and advance U.S. global leadership while ensuring th
                                                 <CheckCircle size={18} className="text-green-500 flex-shrink-0" />
                                                 <div className="flex flex-col md:flex-row md:items-center gap-x-2">
                                                     <span className="text-base font-semibold">Claim 1:</span>
-                                                    <span className="text-base">"The defense budget for 2016 was $612 billion"</span>
+                                                    <span className="text-base">&ldquo;The defense budget for 2016 was $612 billion&rdquo;</span>
                                                 </div>
                                             </div>
                                         </AccordionTrigger>
@@ -346,7 +346,7 @@ The budget aimed to sustain and advance U.S. global leadership while ensuring th
                                             </div>
                                             <div className="mt-2 p-3 bg-background/70 rounded text-sm space-y-2">
                                                 <div className="font-medium text-muted-foreground">Source Explanation:</div>
-                                                <p>The source is from Table S–4 in the U.S. federal budget, which lists annual defense outlays (spending) in billions of dollars. The sequence "612 621 643..." shows spending for 2016, 2017, 2018, and subsequent years. The first value, "612", represents $612 billion for 2016.</p>
+                                                <p>The source is from Table S–4 in the U.S. federal budget, which lists annual defense outlays (spending) in billions of dollars. The sequence &ldquo;612 621 643...&rdquo; shows spending for 2016, 2017, 2018, and subsequent years. The first value, &ldquo;612&rdquo;, represents $612 billion for 2016.</p>
                                             </div>
                                             <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-2 text-sm border-t pt-3">
                                                 <div><span className="font-medium text-muted-foreground">Document:</span> {`BUDGET-2018-TABLES.pdf`}</div>
@@ -364,14 +364,14 @@ The budget aimed to sustain and advance U.S. global leadership while ensuring th
                                                 <CheckCircle size={18} className="text-green-500 flex-shrink-0" />
                                                 <div className="flex flex-col md:flex-row md:items-center gap-x-2">
                                                     <span className="text-base font-semibold">Claim 2:</span>
-                                                    <span className="text-base">"This represents a $26 billion increase from the 2015 enacted level"</span>
+                                                    <span className="text-base">&ldquo;This represents a $26 billion increase from the 2015 enacted level&rdquo;</span>
                                                 </div>
                                             </div>
                                         </AccordionTrigger>
                                         <AccordionContent className="p-3 pt-0">
                                             <div className="mt-2 p-3 bg-background/70 rounded text-sm space-y-2">
                                                 <div className="font-medium text-muted-foreground">Raw Source Text:</div>
-                                                <em className="italic">"a $26 billion or 4.5-percent increase from the 2015 enacted level"</em>
+                                                <em className="italic">&ldquo;a $26 billion or 4.5-percent increase from the 2015 enacted level&rdquo;</em>
                                             </div>
                                             <div className="mt-2 p-3 bg-background/70 rounded text-sm space-y-2">
                                                 <div className="font-medium text-muted-foreground">Source Explanation:</div>
@@ -392,14 +392,14 @@ The budget aimed to sustain and advance U.S. global leadership while ensuring th
                                                 <CheckCircle size={18} className="text-green-500 flex-shrink-0" />
                                                 <div className="flex flex-col md:flex-row md:items-center gap-x-2">
                                                     <span className="text-base font-semibold w-fit whitespace-nowrap">Claim 3:</span>
-                                                    <span className="text-base">"The budget includes $51 billion for Overseas Contingency Operations (OCO)"</span>
+                                                    <span className="text-base">&ldquo;The budget includes $51 billion for Overseas Contingency Operations (OCO)&rdquo;</span>
                                                 </div>
                                             </div>
                                         </AccordionTrigger>
                                         <AccordionContent className="p-3 pt-0">
                                             <div className="mt-2 p-3 bg-background/70 rounded text-sm space-y-2">
                                                 <div className="font-medium text-muted-foreground">Raw Source Text:</div>
-                                                <em className="italic">"...the 2016 budget provides $50.9 billion for Overseas Contingency Operations (OCO) to address extraordinary operational needs."</em>
+                                                <em className="italic">&hellip;the 2016 budget provides $50.9 billion for Overseas Contingency Operations (OCO) to address extraordinary operational needs.&rdquo;</em>
                                             </div>
                                             <div className="mt-2 p-3 bg-background/70 rounded text-sm space-y-2">
                                                 <div className="font-medium text-muted-foreground">Source Explanation:</div>

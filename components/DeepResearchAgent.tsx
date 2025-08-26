@@ -1,0 +1,482 @@
+"use client"
+import React, { useState, useEffect, useRef } from 'react';
+import { Send, User, Search, Brain, Users, FileText, CheckCircle, Clock, Zap, Lightbulb, Target, BarChart3 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+
+interface ChatMessage {
+    type: 'user' | 'bot';
+    content: string;
+    timestamp: string;
+}
+
+interface WorkflowStep {
+    id: string;
+    title: string;
+    description: string;
+    icon: React.ReactNode;
+    status: 'pending' | 'active' | 'completed';
+    duration?: string;
+    details?: string[];
+    progressMessage?: string;
+}
+
+// Helper component to display formatted details
+const DetailItem = ({ label, value }: { label: string; value: string | number | boolean }) => (
+    <div className="flex justify-between items-center py-2 border-b border-border/50">
+        <span className="text-sm text-muted-foreground">{label}</span>
+        <span className="text-sm font-mono text-foreground">{String(value)}</span>
+    </div>
+);
+
+// Helper functions for context-aware progress messages
+const getInitialMessage = (stepId: string): string => {
+    const messages: Record<string, string> = {
+        "clarification": "Assessing query complexity and identifying quantum computing focus areas...",
+        "planning": "Designing comprehensive research strategy for quantum computing developments...",
+        "delegation": "Coordinating specialized research agents for parallel investigation...",
+        "research": "Deploying research agents to gather latest quantum computing breakthroughs...",
+        "synthesis": "Consolidating findings from multiple research streams...",
+
+    };
+    return messages[stepId] || "Initializing step...";
+};
+
+const getProgressMessages = (stepId: string): string[] => {
+    const messageSets: Record<string, string[]> = {
+        "clarification": [
+            "Evaluating query: 'latest developments in quantum computing'...",
+            "Identifying key areas: hardware, algorithms, applications, challenges...",
+            "Determining research scope and depth requirements...",
+            "Prioritizing most relevant quantum computing advancements..."
+        ],
+        "planning": [
+            "Creating research framework for quantum computing analysis...",
+            "Defining search parameters for recent breakthroughs (2023-2025)...",
+            "Mapping out investigation areas: IBM, Google, IonQ, academic research...",
+            "Establishing quality criteria for breakthrough identification..."
+        ],
+        "delegation": [
+            "Spawning Hardware Research Agent for quantum processor developments...",
+            "Creating Algorithm Research Agent for quantum computing methods...",
+            "Deploying Industry Research Agent for commercial applications...",
+            "Activating Academic Research Agent for theoretical advancements...",
+            "Coordinating Challenge Analysis Agent for scalability issues..."
+        ],
+        "research": [
+            "Hardware Agent: Analyzing IBM Eagle 127-qubit processor specifications...",
+            "Algorithm Agent: Investigating VQE applications in molecular simulation...",
+            "Industry Agent: Tracking IonQ's 32-qubit trapped-ion system progress...",
+            "Academic Agent: Reviewing recent quantum supremacy demonstrations...",
+            "Cross-referencing findings with arXiv preprints and conference papers..."
+        ],
+        "synthesis": [
+            "Merging hardware breakthroughs from different quantum platforms...",
+            "Correlating algorithmic progress with practical applications...",
+            "Identifying industry trends and investment patterns...",
+            "Evaluating timeline predictions for fault-tolerant quantum computing...",
+            "Eliminating redundant findings and prioritizing key developments..."
+        ],
+
+    };
+    return messageSets[stepId] || ["Processing...", "Analyzing...", "Finalizing..."];
+};
+
+const getCompletionMessage = (stepId: string): string => {
+    const messages: Record<string, string> = {
+        "clarification": "Query analysis complete - focusing on hardware, algorithms, and industry developments",
+        "planning": "Research strategy established - targeting 2023-2025 quantum computing breakthroughs",
+        "delegation": "5 specialized research agents deployed for parallel quantum computing investigation",
+        "research": "Comprehensive data collection complete - gathered latest findings from all major quantum platforms",
+        "synthesis": "Knowledge consolidation complete - identified 12 key quantum computing developments",
+
+    };
+    return messages[stepId] || "Step completed successfully";
+};
+
+const DeepResearchAgent: React.FC = () => {
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [streamingText, setStreamingText] = useState<string>('');
+    const [isStreaming, setIsStreaming] = useState<boolean>(false);
+    const [hasMessageBeenSent, setHasMessageBeenSent] = useState<boolean>(false);
+    const [workflowSteps, setWorkflowSteps] = useState<WorkflowStep[]>([]);
+    const [currentStepIndex, setCurrentStepIndex] = useState<number>(-1);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    const prefillMessage: string = "What are the latest developments in quantum computing?";
+
+    const dummyResponse: string = `# Comprehensive Analysis: Latest Developments in Quantum Computing
+
+## Executive Summary
+Based on our multi-agent research across hardware, algorithms, industry developments, and academic breakthroughs, quantum computing has reached critical milestones in 2024-2025. This analysis covers 12 major developments identified across five specialized research streams.
+
+## Hardware Advancements & Breakthroughs
+
+### IBM Quantum Systems Evolution
+- **Eagle Processor Series**: Successfully deployed 127-qubit processors with Eagle r3 demonstrating 99.4% 2-qubit gate fidelity
+- **Quantum Volume Achievement**: Reached quantum volume of 1,024, enabling complex algorithm simulations
+- **Cryogenic Control Advances**: New dilution refrigerator technology achieving 4.2mK temperatures with improved thermal stability
+
+### Google Quantum AI Progress
+- **Willow Processor**: 105-qubit device with enhanced error correction capabilities
+- **Quantum Supremacy Validation**: Confirmed Sycamore processor's 2019 supremacy claims through independent verification
+- **Error Correction Milestones**: Demonstrated logical qubits with 800× improvement in error rates
+
+### IonQ & Alternative Platforms
+- **Ion Trap Technology**: 32-qubit Forte system with 99.5% fidelity and 1,000x improvement in gate times
+- **Photonic Quantum Computing**: Xanadu's 216-qubit X16 processor showing progress in boson sampling
+- **Neutral Atom Systems**: ColdQuanta's 256-qubit system achieving 99.9% single-qubit fidelity
+
+## Algorithmic & Software Innovations
+
+### Variational Quantum Algorithms
+- **VQE Applications**: Successfully applied to molecular simulations for pharmaceuticals, including exact ground state calculations for small molecules
+- **QAOA Optimization**: Demonstrated quadratic speedup for portfolio optimization and routing problems
+- **Quantum Machine Learning**: New hybrid classical-quantum algorithms showing promise in pattern recognition
+
+### Error Correction & Fault Tolerance
+- **Surface Code Implementations**: Google's logical qubit demonstrations with reduced error rates
+- **Concatenated Codes**: IBM's implementation of Steane codes achieving fault-tolerant operations
+- **Error Mitigation Techniques**: Advanced readout error correction and dynamical decoupling methods
+
+## Industry Ecosystem & Commercial Applications
+
+### Cloud Quantum Computing
+- **IBM Quantum Network**: 300+ organizations accessing quantum cloud services with Qiskit Runtime
+- **Azure Quantum**: Integration with IonQ and Quantinuum systems for enterprise applications
+- **Google Cloud Quantum**: Early access program for quantum machine learning workloads
+
+### Startup Innovation Landscape
+- **Quantinuum**: 32-qubit H1 processor with integrated error correction
+- **Rigetti Computing**: 84-qubit Aspen-M-2 system with improved gate fidelities
+- **Oxford Quantum Circuits**: 32-qubit IronBridge system with enhanced thermal management
+
+## Research & Academic Breakthroughs
+
+### Theoretical Advances
+- **Quantum Advantage Demonstrations**: Clear separations achieved in random circuit sampling
+- **Quantum Chemistry**: Accurate simulations of complex molecules including catalysts and materials
+- **Cryptography Research**: Post-quantum cryptography implementations on current quantum devices
+
+### International Research Efforts
+- **European Quantum Flagship**: €1B+ investment across 89 projects, focusing on quantum communication and sensing
+- **Chinese Quantum Developments**: Jiuzhang 2.0 photonic quantum computer with 113 detected photons
+- **Canadian Quantum Strategy**: $360M investment in quantum materials and algorithm development
+
+## Technical Challenges & Mitigation Strategies
+
+### Error Correction Challenges
+- **Coherence Time Limitations**: Current systems maintain quantum states for milliseconds
+- **Gate Error Rates**: Despite improvements, 99.9%+ fidelity still required for large-scale applications
+- **Scalability Barriers**: Engineering challenges in scaling to millions of qubits
+
+### Infrastructure & Cost Considerations
+- **Cryogenic Requirements**: Maintaining ultra-low temperatures across large-scale systems
+- **Material Science**: Developing new quantum-compatible materials with reduced noise
+- **Power Consumption**: Managing the extreme energy requirements of quantum operations
+
+## Market Analysis & Investment Trends
+
+### Funding Landscape
+- **Venture Capital**: $3.2B+ invested in quantum startups in 2024
+- **Government Programs**: US, EU, and Asian governments committing $10B+ to quantum research
+- **Corporate R&D**: Tech giants investing $2B+ annually in quantum capabilities
+
+### Commercial Opportunities
+- **Financial Modeling**: Quantum Monte Carlo for portfolio risk analysis
+- **Drug Discovery**: Molecular simulation for accelerated pharmaceutical development
+- **Logistics Optimization**: Route optimization for supply chain management
+
+## Future Roadmap & Timeline Predictions
+
+### Near-term (1-3 years)
+- **NISQ Applications**: Continued growth in optimization and simulation applications
+- **Hybrid Computing**: Increased adoption of quantum-classical hybrid algorithms
+- **Cloud Access**: Democratization through improved cloud quantum services
+
+### Medium-term (3-7 years)
+- **Fault-tolerant Computing**: First practical demonstrations of error-corrected quantum computers
+- **Algorithm Scaling**: Development of algorithms suitable for early fault-tolerant systems
+- **Industry Integration**: Quantum computing integrated into existing data center infrastructure
+
+### Long-term (7-15 years)
+- **Universal Quantum Computing**: Full-scale quantum computers for broad computational problems
+- **Quantum Materials**: Discovery of new materials enabled by quantum simulation
+- **Quantum Communication**: Global quantum networks for secure communication
+
+## Recommendations
+
+### For Researchers
+- Focus on algorithm development that can leverage near-term quantum hardware
+- Invest in quantum error correction and fault-tolerant computing research
+- Develop hybrid classical-quantum approaches for practical applications
+
+### For Industry
+- Begin quantum readiness assessments for computational workflows
+- Invest in quantum talent development and training programs
+- Explore partnerships with quantum hardware and software providers
+
+### For Policymakers
+- Continue support for fundamental quantum research and infrastructure development
+- Develop standards for quantum computing security and interoperability
+- Foster international collaboration in quantum technology development
+
+---
+
+*This analysis was generated through coordinated research by 5 specialized agents covering hardware, algorithms, industry developments, academic research, and market trends. All findings are based on peer-reviewed publications and verified industry announcements from 2023-2025.*`;
+
+    // Initialize workflow steps
+    const initialWorkflowSteps: WorkflowStep[] = [
+        {
+            id: "clarification",
+            title: "Clarification",
+            description: "System might ask for specific aspects (hardware, algorithms, applications)",
+            icon: <Lightbulb size={20} className="text-foreground" />,
+            status: "pending",
+            duration: "7.2s"
+        },
+        {
+            id: "planning",
+            title: "Planning",
+            description: "Creates research brief focusing on recent breakthroughs and key developments",
+            icon: <Target size={20} className="text-foreground" />,
+            status: "pending",
+            duration: "11.1s"
+        },
+        {
+            id: "delegation",
+            title: "Delegation",
+            description: "Supervisor creates 3-5 parallel research tasks",
+            icon: <Users size={20} className="text-foreground" />,
+            status: "pending",
+            duration: "8.8s",
+        },
+        {
+            id: "research",
+            title: "Research",
+            description: "Each sub-researcher conducts focused searches using configured tools",
+            icon: <Search size={20} className="text-foreground" />,
+            status: "pending",
+            duration: "10.5s"
+        },
+        {
+            id: "synthesis",
+            title: "Synthesis",
+            description: "Individual findings are compressed and deduplicated",
+            icon: <BarChart3 size={20} className="text-foreground" />,
+            status: "pending",
+            duration: "7.8s"
+        },
+
+    ];
+
+    // Initialize workflow steps on component mount
+    useEffect(() => {
+        setWorkflowSteps(initialWorkflowSteps);
+    }, []);
+
+    const totalProcessingTime = initialWorkflowSteps.reduce((acc, step) => {
+        return acc + parseFloat(step.duration?.replace('s', '') || '0');
+    }, 0);
+
+    const scrollToBottom = (): void => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages, streamingText]);
+
+    const handleSend = async (): Promise<void> => {
+        if (isLoading || isStreaming || hasMessageBeenSent) return;
+
+        const userMessage: ChatMessage = { type: 'user', content: prefillMessage, timestamp: new Date().toLocaleTimeString() };
+        setMessages((prev: ChatMessage[]) => [...prev, userMessage]);
+
+        setIsLoading(true);
+
+        // Reset workflow steps to initial state
+        setWorkflowSteps(initialWorkflowSteps.map(step => ({ ...step, status: 'pending' })));
+        setCurrentStepIndex(-1);
+
+        // Process each workflow step progressively
+        for (let i = 0; i < initialWorkflowSteps.length; i++) {
+            setCurrentStepIndex(i);
+
+            // Update step status to active and set initial progress message
+            setWorkflowSteps(prev => prev.map((step, idx) =>
+                idx === i ? { ...step, status: 'active', progressMessage: getInitialMessage(step.id) } : step
+            ));
+
+            // Simulate progress updates during the step with context-aware messages
+            const duration = parseFloat(initialWorkflowSteps[i].duration?.replace('s', '') || '1') * 1000;
+            const progressUpdates = getProgressMessages(initialWorkflowSteps[i].id);
+
+            // Update progress messages at intervals
+            const updateInterval = duration / (progressUpdates.length);
+            for (let j = 0; j < progressUpdates.length; j++) {
+                setTimeout(() => {
+                    setWorkflowSteps(prev => prev.map((step, idx) =>
+                        idx === i && step.status === 'active' ? { ...step, progressMessage: progressUpdates[j] } : step
+                    ));
+                }, j * updateInterval);
+            }
+
+            // Wait for the step duration
+            await new Promise<void>(resolve => setTimeout(resolve, duration));
+
+            // Mark step as completed with final message
+            setWorkflowSteps(prev => prev.map((step, idx) =>
+                idx === i ? {
+                    ...step,
+                    status: 'completed',
+                    progressMessage: getCompletionMessage(step.id)
+                } : step
+            ));
+        }
+
+        setIsLoading(false);
+        setIsStreaming(true);
+
+        const botMessage: ChatMessage = { type: 'bot', content: '', timestamp: new Date().toLocaleTimeString() };
+        setMessages((prev: ChatMessage[]) => [...prev, botMessage]);
+
+        // Stream the final response
+        let currentText: string = '';
+        const words: string[] = dummyResponse.split(' ');
+        for (let i = 0; i < words.length; i++) {
+            currentText += (i === 0 ? '' : ' ') + words[i];
+            setStreamingText(currentText);
+            await new Promise<void>(resolve => setTimeout(resolve, 10 + Math.random()));
+        }
+
+        setMessages((prev: ChatMessage[]) =>
+            prev.map((msg, index) =>
+                index === prev.length - 1 ? { ...msg, content: currentText } : msg
+            )
+        );
+
+        setStreamingText('');
+        setIsStreaming(false);
+        setHasMessageBeenSent(true);
+    };
+
+    // Component to display workflow steps using Alert components
+    const WorkflowStepsDisplay = () => {
+        // Show both active and completed steps
+        const visibleSteps = workflowSteps.filter(step => step.status === 'active' || step.status === 'completed');
+
+        if (visibleSteps.length === 0) return null;
+
+        return (
+            <div className="flex flex-col gap-3 my-4 ml-12 max-w-2xl">
+                {visibleSteps.map((step) => (
+                    <Alert key={step.id} className={`border-border ${step.status === 'active' ? 'bg-primary/10 border-primary/20' : 'bg-muted/30'}`}>
+                        {step.status === 'active' ? (
+                            <Clock className="h-4 w-4 text-primary animate-pulse" />
+                        ) : (
+                            <CheckCircle className="h-4 w-4 text-muted-foreground" />
+                        )}
+                        <AlertTitle className="text-foreground flex items-center gap-2">
+                            {step.icon}
+                            {step.title}
+                        </AlertTitle>
+                        <AlertDescription className="text-muted-foreground">
+                            {step.progressMessage || step.description}
+                            {step.details && step.details.length > 0 && step.status === 'completed' && (
+                                <ul className="mt-2 ml-4 list-disc list-inside text-xs">
+                                    {step.details.map((detail, idx) => (
+                                        <li key={idx}>{detail}</li>
+                                    ))}
+                                </ul>
+                            )}
+                        </AlertDescription>
+                    </Alert>
+                ))}
+            </div>
+        );
+    };
+
+    return (
+        <div className="h-full bg-background text-foreground flex flex-col items-center justify-center p-4">
+            <div className="text-center py-4">
+                <h1 className="text-2xl font-semibold">Deep Research Agent</h1>
+            </div>
+
+                <div className="w-full max-w-3xl">
+                    <Card className="h-full bg-background border">
+                        <CardContent className="p-3 h-full flex flex-col min-h-[65vh] max-h-[65vh]">
+                            <div className="flex-1 overflow-y-auto mb-3 space-y-2 pr-2">
+                                {messages.length === 0 && (
+                                    <div className="flex items-center justify-center h-full">
+                                        <div className="text-center">
+                                            <h2 className="text-xl font-medium text-muted-foreground mb-2">
+                                            Click the send button to get an answer
+                                            {/* Click send to explore quantum computing developments */}
+                                            </h2>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {messages.map((message: ChatMessage, index: number) => (
+                                    <div key={index}>
+                                        <div
+                                            className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+                                        >
+                                            <div className={`flex items-start gap-2 max-w-2xl ${message.type === 'user' ? 'flex-row-reverse' : ''}`}>
+                                                <Avatar className="w-8 h-8">
+                                                    <AvatarFallback>
+                                                        {message.type === 'user' ? <User size={16} /> : <Brain size={16} />}
+                                                    </AvatarFallback>
+                                                </Avatar>
+                                                <Card className={`${message.type === 'user' ? 'bg-secondary border' : 'bg-background border'}`}>
+                                                    <CardContent>
+                                                        <div className={`text-base whitespace-pre-wrap`}>
+                                                            {message.type === 'bot' && index === messages.length - 1 && isStreaming
+                                                                ? streamingText
+                                                                : message.content}
+                                                        </div>
+                                                    </CardContent>
+                                                </Card>
+                                            </div>
+                                        </div>
+
+                                        {/* Show workflow steps after user message */}
+                                        {message.type === 'user' && <WorkflowStepsDisplay />}
+                                    </div>
+                                ))}
+
+
+
+                                <div ref={messagesEndRef} />
+                            </div>
+
+                            <div className="flex gap-2 items-center ml-10 mr-1">
+                                <div className="flex-1 relative">
+                                    <Input
+                                        value={isLoading || isStreaming || hasMessageBeenSent ? '' : prefillMessage}
+                                        readOnly
+                                        disabled
+                                        className="bg-input text-base text-foreground placeholder-muted-foreground border rounded-lg px-3 py-2 h-10 cursor-not-allowed"
+                                    />
+                                </div>
+                                <Button
+                                    onClick={handleSend}
+                                    disabled={isLoading || isStreaming || hasMessageBeenSent}
+                                    className="bg-primary hover:bg-primary/90 disabled:bg-primary/30 text-primary-foreground rounded-lg w-10 h-10 flex items-center justify-center cursor-pointer"
+                                >
+                                    <Send size={16} />
+                                </Button>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+            </div>
+    );
+};
+
+export default DeepResearchAgent;
