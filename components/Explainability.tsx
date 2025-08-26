@@ -311,15 +311,15 @@ The budget aimed to sustain and advance U.S. global leadership while ensuring th
                         <div className="space-y-4 min-h-[45vh] max-h-[45vh] overflow-y-auto">
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 text-center">
                                 <div className="bg-muted p-3 rounded">
-                                    <div className="text-base font-semibold text-green-600">High</div>
+                                    <div className="text-base font-semibold text-foreground">High</div>
                                     <div className="text-sm text-muted-foreground">Precision</div>
                                 </div>
                                 <div className="bg-muted p-3 rounded">
-                                    <div className="text-base font-semibold text-green-600">Very Low</div>
+                                    <div className="text-base font-semibold text-foreground">Very Low</div>
                                     <div className="text-sm text-muted-foreground">Hallucination Rate</div>
                                 </div>
                                 <div className="bg-muted p-3 rounded">
-                                    <div className="text-base font-semibold text-green-600">High</div>
+                                    <div className="text-base font-semibold text-foreground">High</div>
                                     <div className="text-sm text-muted-foreground">Clarity</div>
                                 </div>
                             </div>
@@ -330,7 +330,7 @@ The budget aimed to sustain and advance U.S. global leadership while ensuring th
                                     <AccordionItem value="claim-1" className="border bg-muted/50 rounded-lg">
                                         <AccordionTrigger className="hover:no-underline p-3 text-left">
                                             <div className="flex items-center gap-3 w-full">
-                                                <CheckCircle size={18} className="text-green-500 flex-shrink-0" />
+                                                <CheckCircle size={18} className="text-foreground flex-shrink-0" />
                                                 <div className="flex flex-col md:flex-row md:items-center gap-x-2">
                                                     <span className="text-base font-semibold">Claim 1:</span>
                                                     <span className="text-base">&ldquo;The defense budget for 2016 was $612 billion&rdquo;</span>
@@ -358,7 +358,7 @@ The budget aimed to sustain and advance U.S. global leadership while ensuring th
                                     <AccordionItem value="claim-2" className="border bg-muted/50 rounded-lg">
                                         <AccordionTrigger className="hover:no-underline p-3 text-left">
                                             <div className="flex items-center gap-3 w-full">
-                                                <CheckCircle size={18} className="text-green-500 flex-shrink-0" />
+                                                <CheckCircle size={18} className="text-foreground flex-shrink-0" />
                                                 <div className="flex flex-col md:flex-row md:items-center gap-x-2">
                                                     <span className="text-base font-semibold">Claim 2:</span>
                                                     <span className="text-base">&ldquo;This represents a $26 billion increase from the 2015 enacted level&rdquo;</span>
@@ -386,7 +386,7 @@ The budget aimed to sustain and advance U.S. global leadership while ensuring th
                                     <AccordionItem value="claim-3" className="border bg-muted/50 rounded-lg">
                                         <AccordionTrigger className="hover:no-underline p-3 text-left">
                                             <div className="flex items-center gap-3 w-full">
-                                                <CheckCircle size={18} className="text-green-500 flex-shrink-0" />
+                                                <CheckCircle size={18} className="text-foreground flex-shrink-0" />
                                                 <div className="flex flex-col md:flex-row md:items-center gap-x-2">
                                                     <span className="text-base font-semibold w-fit whitespace-nowrap">Claim 3:</span>
                                                     <span className="text-base">&ldquo;The budget includes $51 billion for Overseas Contingency Operations (OCO)&rdquo;</span>
