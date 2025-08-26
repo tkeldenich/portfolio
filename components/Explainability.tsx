@@ -220,7 +220,7 @@ The budget aimed to sustain and advance U.S. global leadership while ensuring th
                 </div>
             </div>
 
-            <DialogContent className="w-full min-w-3xl">
+            <DialogContent className="w-full md:min-w-[56rem] max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>AI Response Analysis</DialogTitle>
                 </DialogHeader>
@@ -231,7 +231,7 @@ The budget aimed to sustain and advance U.S. global leadership while ensuring th
                     </TabsList>
                     <TabsContent value="generation">
                         <div className="space-y-4 min-h-[45vh] max-h-[45vh] overflow-y-auto">
-                            <div className="grid grid-cols-4 gap-2">
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                                 <div className="bg-muted p-2 rounded text-center">
                                     <div className="text-base font-semibold">{(totalProcessingTime / 1000).toFixed(2)}s</div>
                                     <div className="text-sm text-muted-foreground">Processing Time</div>
@@ -309,7 +309,7 @@ The budget aimed to sustain and advance U.S. global leadership while ensuring th
                     </TabsContent>
                     <TabsContent value="evaluation">
                         <div className="space-y-4 min-h-[45vh] max-h-[45vh] overflow-y-auto">
-                            <div className="grid grid-cols-3 gap-2 text-center">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 text-center">
                                 <div className="bg-muted p-3 rounded">
                                     <div className="text-base font-semibold text-green-600">High</div>
                                     <div className="text-sm text-muted-foreground">Precision</div>
@@ -327,7 +327,6 @@ The budget aimed to sustain and advance U.S. global leadership while ensuring th
                             <div className="space-y-3">
                                 <h3 className="text-base font-medium">Extracted Claims:</h3>
                                 <Accordion type="multiple" className="w-full space-y-3">
-                                    {/* --- CORRECTED CLAIM 1: TABLE SOURCE AND CONSISTENT NUMBER --- */}
                                     <AccordionItem value="claim-1" className="border bg-muted/50 rounded-lg">
                                         <AccordionTrigger className="hover:no-underline p-3 text-left">
                                             <div className="flex items-center gap-3 w-full">
@@ -341,7 +340,6 @@ The budget aimed to sustain and advance U.S. global leadership while ensuring th
                                         <AccordionContent className="p-3 pt-0">
                                             <div className="mt-2 p-3 bg-background/70 rounded text-sm space-y-2">
                                                 <div className="font-medium text-muted-foreground">Raw Source Text:</div>
-                                                {/* THIS TABLE DATA IS NOW REWRITTEN TO BE CONSISTENT */}
                                                 <pre className="font-mono whitespace-pre-wrap text-sm">Defense ......................................................... 612 621 643 665 670 667 662 665 679 693 708 722 3,307 6,774</pre>
                                             </div>
                                             <div className="mt-2 p-3 bg-background/70 rounded text-sm space-y-2">
@@ -356,7 +354,6 @@ The budget aimed to sustain and advance U.S. global leadership while ensuring th
                                             </div>
                                         </AccordionContent>
                                     </AccordionItem>
-                                    {/* --- END CORRECTED CLAIM --- */}
 
                                     <AccordionItem value="claim-2" className="border bg-muted/50 rounded-lg">
                                         <AccordionTrigger className="hover:no-underline p-3 text-left">
