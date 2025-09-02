@@ -1,11 +1,11 @@
 "use client"
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, User, Search, Brain, Users, FileText, CheckCircle, Clock, Zap, Lightbulb, Target, BarChart3 } from 'lucide-react';
+import { Send, User, Search, Brain, Users, Clock, Lightbulb, Target, BarChart3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Timeline, TimelineItem, TimelineDot, TimelineContent, TimelineHeading, TimelineLine } from '@/components/ui/timeline';
 
 interface ChatMessage {
     type: 'user' | 'bot';
@@ -105,6 +105,7 @@ const DeepResearchAgent: React.FC = () => {
     const [hasMessageBeenSent, setHasMessageBeenSent] = useState<boolean>(false);
     const [workflowSteps, setWorkflowSteps] = useState<WorkflowStep[]>([]);
     const [currentStepIndex, setCurrentStepIndex] = useState<number>(-1);
+    const [animatedSteps, setAnimatedSteps] = useState<Set<string>>(new Set());
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const prefillMessage: string = "What are the latest developments in quantum computing?";
@@ -279,6 +280,14 @@ Based on our multi-agent research across hardware, algorithms, industry developm
         setWorkflowSteps(initialWorkflowSteps);
     }, []);
 
+    // Track animated steps when currentStepIndex changes
+    useEffect(() => {
+        if (currentStepIndex >= 0 && currentStepIndex < workflowSteps.length) {
+            const currentStepId = workflowSteps[currentStepIndex].id;
+            setAnimatedSteps(prev => new Set([...prev, currentStepId]));
+        }
+    }, [currentStepIndex, workflowSteps]);
+
     const totalProcessingTime = initialWorkflowSteps.reduce((acc, step) => {
         return acc + parseFloat(step.duration?.replace('s', '') || '0');
     }, 0);
@@ -302,6 +311,7 @@ Based on our multi-agent research across hardware, algorithms, industry developm
         // Reset workflow steps to initial state
         setWorkflowSteps(initialWorkflowSteps.map(step => ({ ...step, status: 'pending' })));
         setCurrentStepIndex(-1);
+        setAnimatedSteps(new Set());
 
         // Process each workflow step progressively
         for (let i = 0; i < initialWorkflowSteps.length; i++) {
@@ -365,38 +375,59 @@ Based on our multi-agent research across hardware, algorithms, industry developm
         setHasMessageBeenSent(true);
     };
 
-    // Component to display workflow steps using Alert components
+    // Component to display workflow steps using Timeline components
     const WorkflowStepsDisplay = () => {
-        // Show both active and completed steps
-        const visibleSteps = workflowSteps.filter(step => step.status === 'active' || step.status === 'completed');
+        // Only show steps up to the current step index (sequential reveal)
+        const visibleSteps = workflowSteps.slice(0, currentStepIndex + 1);
 
         if (visibleSteps.length === 0) return null;
 
         return (
-            <div className="flex flex-col gap-3 my-4 ml-12 max-w-2xl">
-                {visibleSteps.map((step) => (
-                    <Alert key={step.id} className={`border-border ${step.status === 'active' ? 'bg-primary/10 border-primary/20' : 'bg-muted/30'}`}>
-                        {step.status === 'active' ? (
-                            <Clock className="h-4 w-4 text-primary animate-pulse" />
-                        ) : (
-                            <CheckCircle className="h-4 w-4 text-muted-foreground" />
-                        )}
-                        <AlertTitle className="text-foreground flex items-center gap-2">
-                            {step.icon}
-                            {step.title}
-                        </AlertTitle>
-                        <AlertDescription className="text-muted-foreground">
-                            {step.progressMessage || step.description}
-                            {step.details && step.details.length > 0 && step.status === 'completed' && (
-                                <ul className="mt-2 ml-4 list-disc list-inside text-xs">
-                                    {step.details.map((detail, idx) => (
-                                        <li key={idx}>{detail}</li>
-                                    ))}
-                                </ul>
-                            )}
-                        </AlertDescription>
-                    </Alert>
-                ))}
+            <div className="my-4 ml-12 max-w-2xl">
+                <Timeline positions="left">
+                    {visibleSteps.map((step, index) => {
+                        // Map workflow step status to timeline item status (only 'done' or 'default')
+                        const itemStatus = step.status === 'completed' ? 'done' : 'default';
+                        // Map workflow step status to timeline dot status
+                        const dotStatus = step.status === 'pending' ? 'default'
+                                         : step.status === 'active' ? 'custom'
+                                         : 'done';
+
+                        // Only animate steps that haven't been animated before
+                        const shouldAnimate = !animatedSteps.has(step.id);
+                        const animationClass = shouldAnimate ? "animate-in fade-in-0 slide-in-from-bottom-2 duration-500" : "";
+
+                        return (
+                            <TimelineItem
+                                key={step.id}
+                                status={itemStatus}
+                                className={animationClass}
+                            >
+                                <TimelineDot
+                                    status={dotStatus}
+                                    customIcon={step.status === 'active' ? <Clock className="size-4 animate-pulse text-primary" /> : step.icon}
+                                    className={step.status === 'active' ? 'border-transparent' : ''}
+                                />
+                                {index < visibleSteps.length - 1 && <TimelineLine done={step.status === 'completed'} />}
+                                <TimelineHeading className="text-foreground flex items-center gap-2">
+                                    {step.title}
+                                </TimelineHeading>
+                                <TimelineContent className="text-muted-foreground">
+                                    <div className="text-sm">
+                                        {step.progressMessage || step.description}
+                                        {step.details && step.details.length > 0 && step.status === 'completed' && (
+                                            <ul className="mt-2 ml-4 list-disc list-inside text-xs">
+                                                {step.details.map((detail, idx) => (
+                                                    <li key={idx}>{detail}</li>
+                                                ))}
+                                            </ul>
+                                        )}
+                                    </div>
+                                </TimelineContent>
+                            </TimelineItem>
+                        );
+                    })}
+                </Timeline>
             </div>
         );
     };
