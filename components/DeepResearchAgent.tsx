@@ -238,7 +238,7 @@ Based on our multi-agent research across hardware, algorithms, industry developm
             description: "System might ask for specific aspects (hardware, algorithms, applications)",
             icon: <Lightbulb size={20} className="text-foreground" />,
             status: "pending",
-            duration: "7.2s"
+            duration: "4.9s"
         },
         {
             id: "planning",
@@ -246,7 +246,7 @@ Based on our multi-agent research across hardware, algorithms, industry developm
             description: "Creates research brief focusing on recent breakthroughs and key developments",
             icon: <Target size={20} className="text-foreground" />,
             status: "pending",
-            duration: "11.1s"
+            duration: "9.1s"
         },
         {
             id: "delegation",
@@ -254,7 +254,7 @@ Based on our multi-agent research across hardware, algorithms, industry developm
             description: "Supervisor creates 3-5 parallel research tasks",
             icon: <Users size={20} className="text-foreground" />,
             status: "pending",
-            duration: "8.8s",
+            duration: "6.8s",
         },
         {
             id: "research",
@@ -262,7 +262,7 @@ Based on our multi-agent research across hardware, algorithms, industry developm
             description: "Each sub-researcher conducts focused searches using configured tools",
             icon: <Search size={20} className="text-foreground" />,
             status: "pending",
-            duration: "10.5s"
+            duration: "8.5s"
         },
         {
             id: "synthesis",
@@ -270,7 +270,7 @@ Based on our multi-agent research across hardware, algorithms, industry developm
             description: "Individual findings are compressed and deduplicated",
             icon: <BarChart3 size={20} className="text-foreground" />,
             status: "pending",
-            duration: "7.8s"
+            duration: "5.8s"
         },
 
     ];
@@ -441,7 +441,7 @@ Based on our multi-agent research across hardware, algorithms, industry developm
                 <div className="w-full max-w-3xl">
                     <Card className="h-full bg-background border">
                         <CardContent className="p-3 h-full flex flex-col min-h-[65vh] max-h-[65vh]">
-                            <div className="flex-1 overflow-y-auto mb-3 space-y-2 pr-2">
+                            <div className={`flex-1 mb-3 space-y-2 pr-2 ${messages.length === 0 ? 'overflow-y-hidden' : 'overflow-y-auto'}`}>
                                 {messages.length === 0 && (
                                     <div className="flex items-center justify-center h-full">
                                         <div className="text-center">

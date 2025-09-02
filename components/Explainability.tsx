@@ -128,7 +128,7 @@ The budget aimed to sustain and advance U.S. global leadership while ensuring th
                 <div className="w-full max-w-3xl">
                     <Card className="h-full bg-background border">
                         <CardContent className="p-3 h-full flex flex-col min-h-[65vh] max-h-[65vh]">
-                            <div className="flex-1 overflow-y-auto mb-3 space-y-2 pr-2">
+                            <div className={`flex-1 mb-3 space-y-2 pr-2 ${messages.length === 0 ? 'overflow-y-hidden' : 'overflow-y-auto'}`}>
                                 {messages.length === 0 && (
                                     <div className="flex items-center justify-center h-full">
                                         <h2 className="text-xl font-medium text-muted-foreground mb-2">
@@ -227,7 +227,7 @@ The budget aimed to sustain and advance U.S. global leadership while ensuring th
                 <Tabs defaultValue="generation" className="w-full">
                     <TabsList className="grid w-full grid-cols-2">
                         <TabsTrigger value="generation">Generation Process</TabsTrigger>
-                        <TabsTrigger value="evaluation">LLM as Judge</TabsTrigger>
+                        <TabsTrigger value="evaluation">LLM-as-a-Judge</TabsTrigger>
                     </TabsList>
                     <TabsContent value="generation">
                         <div className="space-y-4 min-h-[45vh] max-h-[45vh] overflow-y-auto">
