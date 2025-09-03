@@ -13,7 +13,7 @@ export default function Welcome() {
         <div className="mb-8">
           <Avatar className="w-50 h-50">
             <AvatarImage
-              src="/images/profile.jpeg"
+              src="/images/profile.webp"
               alt="Tom Keldenich"
             />
             <AvatarFallback className="bg-primary/10 text-primary font-bold text-3xl">

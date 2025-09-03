@@ -10,7 +10,7 @@ export default function Home() {
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       <TopMenu
         name="Tom Keldenich"
-        imageUrl="/images/profile.jpeg"
+        imageUrl="/images/profile.webp"
       />
       <main className="flex-1 overflow-auto">
         <PortfolioOverview />

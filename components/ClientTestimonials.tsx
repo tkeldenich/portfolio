@@ -20,7 +20,7 @@ const testimonials = [
     name: "Alden Do Rosario",
     //role: "Project Manager",
     //company: "Tech Solutions Inc.",
-    image: "/images/clients/profile/alden.png",
+    image: "/images/clients/profile/alden.webp",
     message: "Tom -- this is fantastic work -- well done ..!!!",
     rating: 5
   },
@@ -29,7 +29,7 @@ const testimonials = [
     name: "Xavier Perrotton",
     //role: "Lead Developer",
     //company: "Valeo",
-    image: "/images/clients/profile/xavier.jpeg",
+    image: "/images/clients/profile/xavier.webp",
     message: "Hello Tom. It was a real pleasure to be able to collaborate together, thank you for your contributions to Valeo! Best wishes for the future, lots of success in your new projects!",
     rating: 5
   },
@@ -38,7 +38,7 @@ const testimonials = [
     name: "Stéphane Doinel",
     //role: "Product Manager",
     //company: "Innovation Labs",
-    image: "/images/clients/profile/stephane.png",
+    image: "/images/clients/profile/stephane.webp",
     message: "It was really nice working with you these last few weeks, I think we made good progress on the different projects with good deployment prospects",
     rating: 5
   }
