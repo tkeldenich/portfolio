@@ -3,6 +3,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { getImagePath } from "@/lib/utils";
 
 export default function Welcome() {
   return (
@@ -13,7 +14,7 @@ export default function Welcome() {
         <div className="mb-8">
           <Avatar className="w-50 h-50">
             <AvatarImage
-              src="/images/profile.webp"
+              src={getImagePath("/images/profile.webp")}
               alt="Tom Keldenich"
             />
             <AvatarFallback className="bg-primary/10 text-primary font-bold text-3xl">

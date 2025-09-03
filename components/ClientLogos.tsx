@@ -2,26 +2,27 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { getImagePath } from "@/lib/utils";
 
 const clientLogos = [
   {
     name: 'Banque de France',
-    src: '/images/clients/banquedefrance.webp',
+    src: getImagePath('/images/clients/banquedefrance.webp'),
     alt: 'Banque de France logo'
   },
   {
     name: 'Valeo',
-    src: '/images/clients/valeo.webp',
+    src: getImagePath('/images/clients/valeo.webp'),
     alt: 'Valeo logo'
   },
   {
     name: 'Total Energies',
-    src: '/images/clients/totalenergies.webp',
+    src: getImagePath('/images/clients/totalenergies.webp'),
     alt: 'Total Energies logo'
   },
   {
     name: 'CustomGPT.ai',
-    src: '/images/clients/customgptai.webp',
+    src: getImagePath('/images/clients/customgptai.webp'),
     alt: 'CustomGPT.ai logo'
   }
 ];
