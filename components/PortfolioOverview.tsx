@@ -24,7 +24,7 @@ export default function PortfolioOverview() {
       </section>
 
       {/* Client Testimonials Section */}
-      <section className="h-[91vh] w-full py-24">
+      <section className="md:h-[91vh] w-full pt-24 pb-8 md:py-24">
         <ClientTestimonials />
       </section>
 

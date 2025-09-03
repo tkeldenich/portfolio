@@ -55,6 +55,13 @@ const ProjectsCarousel: React.FC = () => {
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 py-8">
+      {/* Title */}
+      <div className="text-center">
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground">
+          Interactive Demo
+        </h2>
+      </div>
+
       {/* Carousel */}
       <Carousel
         setApi={setApi}
@@ -67,16 +74,14 @@ const ProjectsCarousel: React.FC = () => {
         <CarouselContent>
           {showcaseItems.map((item, index) => (
             <CarouselItem key={index} className="basis-full">
-              <div className="p-1">
                 <Card className="border-0 shadow-none bg-transparent">
                   <CardContent className="p-0">
                     {/* Component Header */}
                     <div className="text-center">
                       <div className="flex items-center justify-center">
                         <div>
-                          <h2 className="text-2xl font-bold text-foreground">{item.title}</h2>
-                          <Badge variant="secondary" className="text-xs mt-1">
-                            Interactive Demo
+                          <Badge variant="secondary" className="text-sm">
+                            {item.title}
                           </Badge>
                         </div>
                       </div>
@@ -91,7 +96,6 @@ const ProjectsCarousel: React.FC = () => {
                     </div>
                   </CardContent>
                 </Card>
-              </div>
             </CarouselItem>
           ))}
         </CarouselContent>
