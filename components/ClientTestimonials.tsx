@@ -18,7 +18,7 @@ const testimonials = [
   {
     id: 1,
     name: "Alden Do Rosario",
-    //role: "Project Manager",
+    role: "CEO",
     //company: "Tech Solutions Inc.",
     image: "/images/clients/profile/alden.webp",
     message: "Tom -- this is fantastic work -- well done ..!!!",
@@ -27,7 +27,7 @@ const testimonials = [
   {
     id: 2,
     name: "Xavier Perrotton",
-    //role: "Lead Developer",
+    role: "AI & Data Director",
     //company: "Valeo",
     image: "/images/clients/profile/xavier.webp",
     message: "Hello Tom. It was a real pleasure to be able to collaborate together, thank you for your contributions to Valeo! Best wishes for the future, lots of success in your new projects!",
@@ -36,7 +36,7 @@ const testimonials = [
   {
     id: 3,
     name: "Stéphane Doinel",
-    //role: "Product Manager",
+    role: "Product Manager",
     //company: "Innovation Labs",
     image: "/images/clients/profile/stephane.webp",
     message: "It was really nice working with you these last few weeks, I think we made good progress on the different projects with good deployment prospects",
@@ -173,6 +173,9 @@ export default function ClientTestimonials() {
                             <h4 className="font-bold text-foreground text-sm md:text-base truncate blur-sm">
                               {testimonial.name}
                             </h4>
+                            <p className="text-xs md:text-sm text-muted-foreground truncate">
+                              {testimonial.role}
+                            </p>
                           </div>
                         </div>
 
