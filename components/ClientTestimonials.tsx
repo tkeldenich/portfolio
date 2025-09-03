@@ -46,8 +46,6 @@ const testimonials = [
 
 export default function ClientTestimonials() {
   const [api, setApi] = useState<CarouselApi>();
-  const [current, setCurrent] = useState(0);
-  const [count, setCount] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [isInView, setIsInView] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
@@ -56,11 +54,9 @@ export default function ClientTestimonials() {
   React.useEffect(() => {
     if (!api) return;
 
-    setCount(api.scrollSnapList().length);
-    setCurrent(api.selectedScrollSnap() + 1);
-
+    // Set up event listener for carousel changes
     api.on("select", () => {
-      setCurrent(api.selectedScrollSnap() + 1);
+      // Handle carousel selection if needed
     });
   }, [api]);
 
@@ -76,13 +72,14 @@ export default function ClientTestimonials() {
       }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    const currentElement = sectionRef.current;
+    if (currentElement) {
+      observer.observe(currentElement);
     }
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+      if (currentElement) {
+        observer.unobserve(currentElement);
       }
     };
   }, []);
@@ -110,10 +107,6 @@ export default function ClientTestimonials() {
     return () => clearInterval(interval);
   }, [api, isHovered, isInView, isDesktop]);
 
-  const scrollTo = (index: number) => {
-    api?.scrollTo(index);
-  };
-
   return (
     <section ref={sectionRef} className="py-8 md:py-16 bg-background">
       <div className="container mx-auto px-4">
@@ -140,7 +133,7 @@ export default function ClientTestimonials() {
             onMouseLeave={() => setIsHovered(false)}
           >
             <CarouselContent className="-ml-2 md:-ml-4">
-              {testimonials.map((testimonial, index) => (
+              {testimonials.map((testimonial) => (
                 <CarouselItem key={testimonial.id} className="pl-2 md:pl-4 basis-full md:basis-1/2">
                   <div className="p-2 md:p-4">
                     <Card className="h-full border border-muted bg-card/50 backdrop-blur-sm">
@@ -153,7 +146,7 @@ export default function ClientTestimonials() {
                         {/* Testimonial Text */}
                         <div className="flex-1 mb-4 md:mb-6">
                           <p className="text-sm md:text-base text-foreground/90 leading-relaxed italic">
-                            "{testimonial.message}"
+                            &ldquo;{testimonial.message}&rdquo;
                           </p>
                         </div>
 

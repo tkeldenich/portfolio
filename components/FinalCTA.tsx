@@ -13,7 +13,7 @@ export default function FinalCTA() {
             Ready to Transform Your Business?
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
-            Let's discuss how LLM & Agents can power your growth
+            Let&apos;s discuss how LLM & Agents can power your growth
           </p>
 
           {/* CTA Button - Same as in Welcome */}

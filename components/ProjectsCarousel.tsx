@@ -12,7 +12,7 @@ import {
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Brain, Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { Brain, Search } from "lucide-react";
 import Explainability from './Explainability';
 import DeepResearchAgent from './DeepResearchAgent';
 

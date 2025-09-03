@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Send, User, Search, Brain, Users, Clock, Lightbulb, Target, BarChart3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -92,8 +92,6 @@ const getCompletionMessage = (stepId: string): string => {
 const DeepResearchAgent: React.FC = () => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [streamingText, setStreamingText] = useState<string>('');
-    const [isStreaming, setIsStreaming] = useState<boolean>(false);
     const [hasMessageBeenSent, setHasMessageBeenSent] = useState<boolean>(false);
     const [workflowSteps, setWorkflowSteps] = useState<WorkflowStep[]>([]);
     const [currentStepIndex, setCurrentStepIndex] = useState<number>(-1);
@@ -224,7 +222,7 @@ Based on our multi-agent research across hardware, algorithms, industry developm
 *This analysis was generated through coordinated research by 5 specialized agents covering hardware, algorithms, industry developments, academic research, and market trends. All findings are based on peer-reviewed publications and verified industry announcements from 2023-2025.*`;
 
     // Initialize workflow steps
-    const initialWorkflowSteps: WorkflowStep[] = [
+    const initialWorkflowSteps: WorkflowStep[] = useMemo(() => [
         {
             id: "clarification",
             title: "Clarification",
@@ -266,12 +264,12 @@ Based on our multi-agent research across hardware, algorithms, industry developm
             duration: "5.8s"
         },
 
-    ];
+    ], []);
 
     // Initialize workflow steps on component mount
     useEffect(() => {
         setWorkflowSteps(initialWorkflowSteps);
-    }, []);
+    }, [initialWorkflowSteps]);
 
     // Track animated steps when currentStepIndex changes
     useEffect(() => {
@@ -288,14 +286,14 @@ Based on our multi-agent research across hardware, algorithms, industry developm
     };
 
     useEffect(() => {
-        // Only scroll if there are messages or streaming text is present
-        if (messages.length > 0 || streamingText.trim().length > 0) {
+        // Only scroll if there are messages
+        if (messages.length > 0) {
             scrollToBottom();
         }
-    }, [messages, streamingText]);
+    }, [messages]);
 
     const handleSend = async (): Promise<void> => {
-        if (isLoading || isStreaming || hasMessageBeenSent) return;
+        if (isLoading || hasMessageBeenSent) return;
 
         const userMessage: ChatMessage = { type: 'user', content: prefillMessage, timestamp: new Date().toLocaleTimeString() };
         setMessages((prev: ChatMessage[]) => [...prev, userMessage]);
@@ -438,9 +436,7 @@ Based on our multi-agent research across hardware, algorithms, industry developm
                                                 <Card className={`${message.type === 'user' ? 'bg-secondary border' : 'bg-background border'}`}>
                                                     <CardContent>
                                                         <div className={`text-base whitespace-pre-wrap`}>
-                                                            {message.type === 'bot' && index === messages.length - 1 && isStreaming
-                                                                ? streamingText
-                                                                : message.content}
+                                                            {message.content}
                                                         </div>
                                                     </CardContent>
                                                 </Card>
@@ -460,7 +456,7 @@ Based on our multi-agent research across hardware, algorithms, industry developm
                             <div className="flex gap-2 items-center ml-10 mr-1">
                                 <div className="flex-1 relative">
                                     <Input
-                                        value={isLoading || isStreaming || hasMessageBeenSent ? '' : prefillMessage}
+                                        value={isLoading || hasMessageBeenSent ? '' : prefillMessage}
                                         readOnly
                                         disabled
                                         className="bg-input text-base text-foreground placeholder-muted-foreground border rounded-lg px-3 py-2 h-10 cursor-not-allowed"
@@ -468,7 +464,7 @@ Based on our multi-agent research across hardware, algorithms, industry developm
                                 </div>
                                 <Button
                                     onClick={handleSend}
-                                    disabled={isLoading || isStreaming || hasMessageBeenSent}
+                                    disabled={isLoading || hasMessageBeenSent}
                                     className="bg-primary hover:bg-primary/90 disabled:bg-primary/30 text-primary-foreground rounded-lg w-10 h-10 flex items-center justify-center cursor-pointer"
                                 >
                                     <Send size={16} />
