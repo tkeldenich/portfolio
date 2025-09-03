@@ -24,14 +24,6 @@ interface WorkflowStep {
     progressMessage?: string;
 }
 
-// Helper component to display formatted details
-const DetailItem = ({ label, value }: { label: string; value: string | number | boolean }) => (
-    <div className="flex justify-between items-center py-2 border-b border-border/50">
-        <span className="text-sm text-muted-foreground">{label}</span>
-        <span className="text-sm font-mono text-foreground">{String(value)}</span>
-    </div>
-);
-
 // Helper functions for context-aware progress messages
 const getInitialMessage = (stepId: string): string => {
     const messages: Record<string, string> = {
@@ -107,6 +99,7 @@ const DeepResearchAgent: React.FC = () => {
     const [currentStepIndex, setCurrentStepIndex] = useState<number>(-1);
     const [animatedSteps, setAnimatedSteps] = useState<Set<string>>(new Set());
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const messagesContainerRef = useRef<HTMLDivElement>(null);
 
     const prefillMessage: string = "What are the latest developments in quantum computing?";
 
@@ -288,16 +281,17 @@ Based on our multi-agent research across hardware, algorithms, industry developm
         }
     }, [currentStepIndex, workflowSteps]);
 
-    const totalProcessingTime = initialWorkflowSteps.reduce((acc, step) => {
-        return acc + parseFloat(step.duration?.replace('s', '') || '0');
-    }, 0);
-
     const scrollToBottom = (): void => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        if (messagesContainerRef.current) {
+            messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+        }
     };
 
     useEffect(() => {
-        scrollToBottom();
+        // Only scroll if there are messages or streaming text is present
+        if (messages.length > 0 || streamingText.trim().length > 0) {
+            scrollToBottom();
+        }
     }, [messages, streamingText]);
 
     const handleSend = async (): Promise<void> => {
@@ -350,28 +344,9 @@ Based on our multi-agent research across hardware, algorithms, industry developm
         }
 
         setIsLoading(false);
-        setIsStreaming(true);
 
-        const botMessage: ChatMessage = { type: 'bot', content: '', timestamp: new Date().toLocaleTimeString() };
+        const botMessage: ChatMessage = { type: 'bot', content: dummyResponse, timestamp: new Date().toLocaleTimeString() };
         setMessages((prev: ChatMessage[]) => [...prev, botMessage]);
-
-        // Stream the final response
-        let currentText: string = '';
-        const words: string[] = dummyResponse.split(' ');
-        for (let i = 0; i < words.length; i++) {
-            currentText += (i === 0 ? '' : ' ') + words[i];
-            setStreamingText(currentText);
-            await new Promise<void>(resolve => setTimeout(resolve, 10 + Math.random()));
-        }
-
-        setMessages((prev: ChatMessage[]) =>
-            prev.map((msg, index) =>
-                index === prev.length - 1 ? { ...msg, content: currentText } : msg
-            )
-        );
-
-        setStreamingText('');
-        setIsStreaming(false);
         setHasMessageBeenSent(true);
     };
 
@@ -434,18 +409,14 @@ Based on our multi-agent research across hardware, algorithms, industry developm
 
     return (
         <div className="h-full bg-background text-foreground flex flex-col items-center justify-center p-4">
-            <div className="text-center py-4">
-                <h1 className="text-2xl font-semibold">Deep Research Agent</h1>
-            </div>
-
                 <div className="w-full max-w-3xl">
                     <Card className="h-full bg-background border">
-                        <CardContent className="p-3 h-full flex flex-col min-h-[65vh] max-h-[65vh]">
-                            <div className={`flex-1 mb-3 space-y-2 pr-2 ${messages.length === 0 ? 'overflow-y-hidden' : 'overflow-y-auto'}`}>
+                        <CardContent className="p-3 h-full flex flex-col h-[65vh]">
+                            <div ref={messagesContainerRef} className={`flex-1 mb-3 space-y-2 pr-2 ${messages.length === 0 ? 'overflow-y-hidden' : 'overflow-y-auto'}`}>
                                 {messages.length === 0 && (
                                     <div className="flex items-center justify-center h-full">
                                         <div className="text-center">
-                                            <h2 className="text-xl font-medium text-muted-foreground mb-2">
+                                            <h2 className="text-xl font-medium text-muted-foreground">
                                             Click the send button to get an answer
                                             {/* Click send to explore quantum computing developments */}
                                             </h2>

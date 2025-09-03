@@ -19,6 +19,7 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Badge } from './ui/badge';
 
 
 interface ChatMessage {
@@ -43,6 +44,7 @@ const Explainability: React.FC = () => {
     const [isStreaming, setIsStreaming] = useState<boolean>(false);
     const [hasMessageBeenSent, setHasMessageBeenSent] = useState<boolean>(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const messagesContainerRef = useRef<HTMLDivElement>(null);
 
     const prefillMessage: string = "what is the budget for defense in 2016?";
     const dummyResponse: string = `The defense budget for fiscal year 2016 was set at $612 billion in discretionary funds. This figure represents a $26 billion increase, or 4.5 percent, from the 2015 enacted level. The budget includes $561 billion in base discretionary funding for national defense, with $534 billion allocated specifically to the Department of Defense (DOD). Additionally, it includes $51 billion designated for Overseas Contingency Operations (OCO), which was $13 billion lower than the 2015 enacted level.
@@ -77,11 +79,16 @@ The budget aimed to sustain and advance U.S. global leadership while ensuring th
 
 
     const scrollToBottom = (): void => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        if (messagesContainerRef.current) {
+            messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+        }
     };
 
     useEffect(() => {
-        scrollToBottom();
+        // Only scroll if there are messages or streaming text is present
+        if (messages.length > 0 || streamingText.trim().length > 0) {
+            scrollToBottom();
+        }
     }, [messages, streamingText]);
 
     const handleSend = async (): Promise<void> => {
@@ -121,19 +128,17 @@ The budget aimed to sustain and advance U.S. global leadership while ensuring th
     return (
         <Dialog>
             <div className="h-full bg-background text-foreground flex flex-col items-center justify-center p-4">
-                <div className="text-center py-4">
-                    <h1 className="text-2xl font-semibold">RAG system with Explainability</h1>
-                </div>
-
                 <div className="w-full max-w-3xl">
                     <Card className="h-full bg-background border">
-                        <CardContent className="p-3 h-full flex flex-col min-h-[65vh] max-h-[65vh]">
-                            <div className={`flex-1 mb-3 space-y-2 pr-2 ${messages.length === 0 ? 'overflow-y-hidden' : 'overflow-y-auto'}`}>
+                        <CardContent className="p-3 flex flex-col h-[65vh] max-h-[65vh] min-h-[65vh]">
+                            <div ref={messagesContainerRef} className={`flex-1 mb-3 space-y-2 pr-2 ${messages.length === 0 ? 'overflow-y-hidden' : 'overflow-y-auto'}`}>
                                 {messages.length === 0 && (
                                     <div className="flex items-center justify-center h-full">
-                                        <h2 className="text-xl font-medium text-muted-foreground mb-2">
-                                            Click the send button to get an answer
-                                        </h2>
+                                        <div className="text-center">
+                                            <h2 className="text-xl font-medium text-muted-foreground">
+                                                Click the send button to get an answer
+                                            </h2>
+                                        </div>
                                     </div>
                                 )}
                                 {messages.map((message: ChatMessage, index: number) => (
